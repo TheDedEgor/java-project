@@ -1,0 +1,17 @@
+package edu.java.bot.main;
+
+import com.pengrad.telegrambot.ExceptionHandler;
+import com.pengrad.telegrambot.TelegramException;
+
+public class BotExceptionHandler implements ExceptionHandler {
+    @Override
+    public void onException(TelegramException e) {
+        if (e.response() != null) {
+            // got bad response from telegram
+            e.response().errorCode();
+            e.response().description();
+        } else {
+            // probably network error
+        }
+    }
+}
