@@ -2,7 +2,9 @@ package edu.java.bot.main;
 
 import com.pengrad.telegrambot.ExceptionHandler;
 import com.pengrad.telegrambot.TelegramException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BotExceptionHandler implements ExceptionHandler {
     @Override
     public void onException(TelegramException e) {

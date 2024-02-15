@@ -4,11 +4,18 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StartCommand implements BotCommand {
 
     // TODO имитация данных в бд
     private static List<Long> listIds = new ArrayList<>();
+
+    @Override
+    public String command() {
+        return "/start";
+    }
 
     @Override
     public SendMessage handle(Update update) {

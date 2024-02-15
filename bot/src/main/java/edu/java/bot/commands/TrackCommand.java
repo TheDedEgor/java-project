@@ -2,38 +2,44 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import edu.java.bot.links.LinkRepository;
+import edu.java.bot.links.LinkValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class TrackCommand implements BotCommand {
 
-    private static final Pattern URL_PATTERN = Pattern.compile(
-        "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
+    @Autowired
+    private LinkRepository linkRepository;
 
-    // TODO имитация данных в бд
-    public static Map<Long, List<String>> mapUrl = new HashMap<>();
+    @Autowired
+    private LinkValidation linkValidation;
 
     @Override
+    public String command() {
+        return "/track";
+    }
+
+    @Override
+    @SuppressWarnings("ReturnCount")
     public SendMessage handle(Update update) {
         var chatId = update.message().chat().id();
-        var msg = update.message().text();
-        var url = msg.split("\\s+")[1];
-        if (URL_PATTERN.matcher(url).matches()) {
-            var text = "Ссылка успешно добавлена";
-            var urls = mapUrl.getOrDefault(chatId, new ArrayList<>());
-            if (urls.isEmpty()) {
-                urls.add(url);
-                mapUrl.put(chatId, urls);
-                return new SendMessage(chatId, text);
+        var msg = update.message().text().split("\\s+");
+        if (msg.length < 2) {
+            return new SendMessage(chatId, "Введите ссылку после команды");
+        }
+        var url = msg[1];
+        if (linkValidation.validateLink(url)) {
+            if (linkRepository.existLink(chatId, url)) {
+                return new SendMessage(chatId, "Ссылка уже добавлена");
             }
-            if (!urls.contains(url)) {
-                urls.add(url);
-                return new SendMessage(chatId, text);
+            var added = linkRepository.trackLink(chatId, url);
+            if (added) {
+                return new SendMessage(chatId, "Ссылка успешно добавлена");
             }
-            return new SendMessage(chatId, "Ссылка уже добавлена");
+            return new SendMessage(chatId, "Не удалось добавить ссылку");
         } else {
             return new SendMessage(chatId, "Неверный формат ссылки");
         }
