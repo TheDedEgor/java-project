@@ -2,8 +2,8 @@ package edu.java.scrapper;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import edu.java.clients.GitHubClient;
-import edu.java.clients.StackOverflowClient;
+import edu.java.client.GitHubClient;
+import edu.java.client.StackOverflowClient;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,10 +61,10 @@ public class WebClientTest {
 
         var data = gitHubClient.getRepository("owner", "repo");
 
-        assertThat(data.getId()).isEqualTo(1L);
-        assertThat(data.getName()).isEqualTo("repo");
-        assertThat(data.getUpdatedAt()).isEqualTo("2011-01-26T19:06:43Z");
-        assertThat(data.getPushedAt()).isEqualTo("2011-01-26T19:06:43Z");
+        assertThat(data.id()).isEqualTo(1L);
+        assertThat(data.name()).isEqualTo("repo");
+        assertThat(data.updatedAt()).isEqualTo("2011-01-26T19:06:43Z");
+        assertThat(data.pushedAt()).isEqualTo("2011-01-26T19:06:43Z");
 
         verify(getRequestedFor(urlEqualTo(apiUrl)));
     }
@@ -80,11 +80,11 @@ public class WebClientTest {
             )
         );
 
-        var data = stackOverflowClient.getQuestion(1L).getQuestions().getFirst();
+        var data = stackOverflowClient.getQuestion(1L).questions().getFirst();
 
-        assertThat(data.getId()).isEqualTo(1L);
-        assertThat(data.getTitle()).isEqualTo("Hello world!");
-        assertThat(data.getLastActivityDate()).isEqualTo("2021-10-25T12:03:18Z");
+        assertThat(data.id()).isEqualTo(1L);
+        assertThat(data.title()).isEqualTo("Hello world!");
+        assertThat(data.lastActivityDate()).isEqualTo("2021-10-25T12:03:18Z");
 
         verify(getRequestedFor(urlEqualTo(apiUrl)));
     }

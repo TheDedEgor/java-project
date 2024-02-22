@@ -1,4 +1,4 @@
-package edu.java.clients;
+package edu.java.client;
 
 import edu.java.models.dto.QuestionListDTO;
 import org.springframework.web.bind.annotation.PathVariable;
