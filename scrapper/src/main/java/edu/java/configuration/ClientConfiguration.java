@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.client.BotClient;
 import edu.java.client.GitHubClient;
 import edu.java.client.StackOverflowClient;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,9 @@ public class ClientConfiguration {
 
     private static final String GIT_HUB_BASE_URL = "https://api.github.com";
 
-    private static final String STACK_OVERFLOW_CLIENT = "https://api.stackexchange.com";
+    private static final String STACK_OVERFLOW_CLIENT_BASE_URL = "https://api.stackexchange.com";
+
+    private static final String BOT_CLIENT_BASE_URL = "http://localhost:8090";
 
     @Bean
     public GitHubClient clientService() {
@@ -29,11 +32,20 @@ public class ClientConfiguration {
     public StackOverflowClient stackOverflowClient() {
         RestClient restClient = RestClient.builder()
             .requestFactory(new ReactorNettyClientRequestFactory())
-            .baseUrl(STACK_OVERFLOW_CLIENT)
+            .baseUrl(STACK_OVERFLOW_CLIENT_BASE_URL)
             .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
 
         return factory.createClient(StackOverflowClient.class);
+    }
+
+    @Bean
+    public BotClient botClient() {
+        RestClient restClient = RestClient.builder().baseUrl(BOT_CLIENT_BASE_URL).build();
+        RestClientAdapter adapter = RestClientAdapter.create(restClient);
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
+
+        return factory.createClient(BotClient.class);
     }
 }
