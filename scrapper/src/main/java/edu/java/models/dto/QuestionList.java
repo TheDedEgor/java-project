@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public record QuestionListDTO(
+public record QuestionList(
     @JsonProperty("items")
     List<QuestionDTO> questions
 
