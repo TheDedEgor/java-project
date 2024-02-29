@@ -1,8 +1,8 @@
-package edu.java.models.dto;
+package edu.java.bot.models.dto;
 
 import java.util.List;
 
-public record ErrorResponseDTO(
+public record ErrorResponse(
     String code,
     String description,
     String exceptionName,

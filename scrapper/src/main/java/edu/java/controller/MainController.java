@@ -1,9 +1,9 @@
 package edu.java.controller;
 
-import edu.java.models.dto.AddLinkRequestDTO;
-import edu.java.models.dto.LinkResponseDTO;
-import edu.java.models.dto.ListLinksResponseDTO;
-import edu.java.models.dto.RemoveLinkRequestDTO;
+import edu.java.models.dto.AddLinkRequest;
+import edu.java.models.dto.LinkResponse;
+import edu.java.models.dto.ListLinksResponse;
+import edu.java.models.dto.RemoveLinkRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -30,27 +30,27 @@ public class MainController {
     }
 
     @GetMapping("/links")
-    public ResponseEntity<ListLinksResponseDTO> getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId) {
-        var listLinksResponseDTO =
-            new ListLinksResponseDTO(List.of(new LinkResponseDTO(1, "https://edu.tinkoff.ru")), 1);
-        return new ResponseEntity<>(listLinksResponseDTO, HttpStatus.OK);
+    public ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId) {
+        var listLinksResponse =
+            new ListLinksResponse(List.of(new LinkResponse(1, "https://edu.tinkoff.ru")), 1);
+        return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
     }
 
     @PostMapping("/links")
-    public ResponseEntity<LinkResponseDTO> createLink(
+    public ResponseEntity<LinkResponse> createLink(
         @RequestHeader("Tg-Chat-Id") Integer chatId,
-        @RequestBody @Valid AddLinkRequestDTO addLinkRequestDTO
+        @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        var linkResponseDTO = new LinkResponseDTO(1, "https://github.com");
-        return new ResponseEntity<>(linkResponseDTO, HttpStatus.OK);
+        var linkResponse = new LinkResponse(1, "https://github.com");
+        return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/links")
-    public ResponseEntity<LinkResponseDTO> deleteLink(
+    public ResponseEntity<LinkResponse> deleteLink(
         @RequestHeader("Tg-Chat-Id") Integer chatId,
-        @RequestBody @Valid RemoveLinkRequestDTO removeLinkRequestDTO
+        @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
-        var linkResponseDTO = new LinkResponseDTO(1, "https://stackoverflow.com/");
-        return new ResponseEntity<>(linkResponseDTO, HttpStatus.OK);
+        var linkResponse = new LinkResponse(1, "https://stackoverflow.com/");
+        return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
 }

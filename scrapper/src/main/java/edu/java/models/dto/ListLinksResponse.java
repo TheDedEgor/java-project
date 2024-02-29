@@ -2,8 +2,8 @@ package edu.java.models.dto;
 
 import java.util.List;
 
-public record ListLinksResponseDTO(
-    List<LinkResponseDTO> links,
+public record ListLinksResponse(
+    List<LinkResponse> links,
     Integer size
 ) {
 }

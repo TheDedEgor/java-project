@@ -1,6 +1,6 @@
 package edu.java.controller;
 
-import edu.java.models.dto.ErrorResponseDTO;
+import edu.java.models.dto.ErrorResponse;
 import java.util.Arrays;
 import java.util.Objects;
 import org.springframework.http.HttpStatus;
@@ -15,13 +15,13 @@ public class ResponseExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handler(Exception ex) {
         var stacktrace = Arrays.stream(ex.getStackTrace()).map(Objects::toString).toList();
-        var errorResponseDTO = new ErrorResponseDTO(
+        var errorResponse = new ErrorResponse(
             "400",
             "Неверный формат url",
             ex.getClass().getSimpleName(),
             ex.getMessage(),
             stacktrace
         );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

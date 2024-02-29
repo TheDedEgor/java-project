@@ -1,6 +1,6 @@
 package edu.java.models.dto;
 
-public record LinkResponseDTO(
+public record LinkResponse(
     Integer id,
     String url
 ) {

@@ -3,7 +3,7 @@ package edu.java.models.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-public record RepositoryDTO(
+public record Repository(
     Long id,
     String name,
     @JsonProperty("pushed_at")

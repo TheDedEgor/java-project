@@ -1,8 +1,8 @@
 package edu.java.bot.client;
 
-import edu.java.bot.models.dto.AddLinkRequestDTO;
-import edu.java.bot.models.dto.LinkResponseDTO;
-import edu.java.bot.models.dto.ListLinksResponseDTO;
+import edu.java.bot.models.dto.AddLinkRequest;
+import edu.java.bot.models.dto.LinkResponse;
+import edu.java.bot.models.dto.ListLinksResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,17 +18,17 @@ public interface ScrapperClient {
     void deleteTgChat(@PathVariable Integer id);
 
     @GetExchange("/links")
-    ListLinksResponseDTO getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId);
+    ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId);
 
     @PostExchange("/links")
-    LinkResponseDTO createLink(
+    LinkResponse createLink(
         @RequestHeader("Tg-Chat-Id") Integer chatId,
-        @RequestBody AddLinkRequestDTO addLinkRequestDTO
+        @RequestBody AddLinkRequest addLinkRequest
     );
 
     @DeleteExchange("/links")
-    LinkResponseDTO deleteLink(
+    LinkResponse deleteLink(
         @RequestHeader("Tg-Chat-Id") Integer chatId,
-        @RequestBody AddLinkRequestDTO addLinkRequestDTO
+        @RequestBody AddLinkRequest addLinkRequest
     );
 }

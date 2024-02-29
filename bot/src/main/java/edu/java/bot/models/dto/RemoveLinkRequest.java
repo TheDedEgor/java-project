@@ -1,6 +1,6 @@
 package edu.java.bot.models.dto;
 
-public record AddLinkRequestDTO(
+public record RemoveLinkRequest(
     String link
 ) {
 }

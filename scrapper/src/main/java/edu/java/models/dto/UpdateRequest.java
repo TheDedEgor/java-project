@@ -2,7 +2,7 @@ package edu.java.models.dto;
 
 import java.util.List;
 
-public record UpdateRequestDTO(
+public record UpdateRequest(
     Integer id,
     String url,
     String description,

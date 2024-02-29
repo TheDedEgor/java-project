@@ -2,7 +2,7 @@ package edu.java.bot.models.dto;
 
 import java.net.URI;
 
-public record LinkResponseDTO(
+public record LinkResponse(
     Integer id,
     URI url
 ) {
