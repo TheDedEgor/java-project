@@ -2,12 +2,17 @@
 
 --changeset egor:1
 create table chats (
-    id int primary key,
-    name varchar(255)
+    id bigserial primary key,
+    chat_id bigint not null
 );
 
 create table links (
-    id int primary key,
-    url varchar(255) not null,
-    chat_id int references chats on delete cascade
-)
+    id bigserial primary key,
+    url varchar(255) not null
+);
+
+create table chats_links (
+    id bigserial primary key,
+    chat_id bigint references chats,
+    link_id bigint references links
+);
