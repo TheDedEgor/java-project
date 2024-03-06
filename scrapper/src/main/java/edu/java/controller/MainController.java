@@ -4,8 +4,10 @@ import edu.java.models.dto.AddLinkRequest;
 import edu.java.models.dto.LinkResponse;
 import edu.java.models.dto.ListLinksResponse;
 import edu.java.models.dto.RemoveLinkRequest;
+import edu.java.repository.ChatRepository;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,13 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 
+    @Autowired
+    private ChatRepository chatRepository;
+
     @PostMapping("/tg-chat/{id}")
     public ResponseEntity<?> createTgChat(@PathVariable Integer id) {
+        chatRepository.add(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<?> deleteTgChat(@PathVariable Integer id) {
+        chatRepository.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
