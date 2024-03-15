@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
+@Qualifier("InMemoryLinkRepository")
 public class InMemoryLinkRepository implements LinkRepository {
 
     public static Map<Long, List<String>> mapUrl = new HashMap<>();
@@ -16,29 +18,20 @@ public class InMemoryLinkRepository implements LinkRepository {
         return mapUrl.getOrDefault(chatId, new ArrayList<>());
     }
 
-    @Override
-    public Boolean existLink(Long chatId, String link) {
-        var urls = mapUrl.getOrDefault(chatId, new ArrayList<>());
-        return urls.contains(link);
-    }
 
     @Override
-    public Boolean trackLink(Long chatId, String link) {
+    public void trackLink(Long chatId, String link) {
         var urls = mapUrl.getOrDefault(chatId, new ArrayList<>());
         if (urls.isEmpty()) {
             urls.add(link);
             mapUrl.put(chatId, urls);
-            return true;
         } else if (!urls.contains(link)) {
             urls.add(link);
-            return true;
         }
-        return false;
     }
 
     @Override
-    public Boolean untrackLink(Long chatId, String link) {
-        var urls = mapUrl.getOrDefault(chatId, new ArrayList<>());
-        return urls.remove(link);
+    public void untrackLink(Long chatId, String link) {
+        mapUrl.getOrDefault(chatId, new ArrayList<>());
     }
 }

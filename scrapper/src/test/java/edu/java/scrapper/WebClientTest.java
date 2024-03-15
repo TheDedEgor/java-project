@@ -2,8 +2,8 @@ package edu.java.scrapper;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import edu.java.client.GitHubClient;
-import edu.java.client.StackOverflowClient;
+import edu.java.scrapper.client.GitHubClient;
+import edu.java.scrapper.client.StackOverflowClient;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

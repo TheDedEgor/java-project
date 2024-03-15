@@ -9,28 +9,28 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Component
 @SuppressWarnings("MagicNumber")
-public class StartCommand implements BotCommand {
+public class DeleteCommand implements BotCommand {
 
     @Autowired
     private ChatRepository chatRepository;
 
     @Override
     public String command() {
-        return "/start";
+        return "/delete";
     }
 
     @Override
     public SendMessage handle(Update update) {
         var chatId = update.message().chat().id();
         try {
-            chatRepository.registerChat(chatId);
+            chatRepository.unregisterChat(chatId);
         } catch (HttpClientErrorException ex) {
-            if (ex.getStatusCode().value() == 400) {
-                return new SendMessage(chatId, "Вы уже зарегистрированы");
+            if (ex.getStatusCode().value() == 404) {
+                return new SendMessage(chatId, "Вы не были еще зарегистрированы");
             } else {
                 return new SendMessage(chatId, "Произошла неизвестная ошибка");
             }
         }
-        return new SendMessage(chatId, "Вы успешно зарегистрированы");
+        return new SendMessage(chatId, "Аккаунт успешно удален");
     }
 }

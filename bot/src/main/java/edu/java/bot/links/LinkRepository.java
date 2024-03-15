@@ -6,9 +6,7 @@ public interface LinkRepository {
 
     List<String> getLinks(Long chatId);
 
-    Boolean existLink(Long chatId, String link);
+    void trackLink(Long chatId, String link);
 
-    Boolean trackLink(Long chatId, String link);
-
-    Boolean untrackLink(Long chatId, String link);
+    void untrackLink(Long chatId, String link);
 }
