@@ -42,7 +42,8 @@ public class LinkRepository {
             (row, item) ->
                 new Link(
                     row.getLong("id"),
-                    row.getString("url")
+                    row.getString("url"),
+                    parseDate(row.getString("last_check_time"))
                 ), tgChatId
         );
     }
@@ -55,7 +56,8 @@ public class LinkRepository {
                 """,
             (row, item) -> new Link(
                 row.getLong("id"),
-                row.getString("url")
+                row.getString("url"),
+                parseDate(row.getString("last_check_time"))
             )
         );
     }
@@ -148,7 +150,8 @@ public class LinkRepository {
         var links = jdbcTemplate.query("SELECT * FROM links WHERE id = ?",
             (row, item) -> new Link(
                 row.getLong("id"),
-                row.getString("url")
+                row.getString("url"),
+                parseDate(row.getString("last_check_time"))
             ), linkId
         );
         if (links.isEmpty()) {

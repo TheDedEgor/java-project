@@ -1,4 +1,6 @@
 package edu.java.scrapper.models.entity;
 
-public record Link(Long id, String url) {
+import java.time.OffsetDateTime;
+
+public record Link(Long id, String url, OffsetDateTime lastCheckTime) {
 }
