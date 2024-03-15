@@ -33,7 +33,8 @@ public class LinkRepository {
             """
                 SELECT
                     links.id,
-                    links.url
+                    links.url,
+                    links.last_check_time
                 FROM links
                     JOIN chats_links cl ON links.id = cl.link_id
                     JOIN chats ch ON ch.id = cl.chat_id
