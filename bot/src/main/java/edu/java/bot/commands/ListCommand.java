@@ -2,14 +2,16 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repository.links.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ListCommand implements BotCommand {
 
     @Autowired
+    @Qualifier("InDbLinkRepository")
     private LinkRepository linkRepository;
 
     @Override

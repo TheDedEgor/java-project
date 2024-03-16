@@ -2,16 +2,19 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.LinkRepository;
-import edu.java.bot.links.LinkValidation;
+import edu.java.bot.repository.links.LinkRepository;
+import edu.java.bot.repository.links.LinkValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.client.HttpClientErrorException;
 
 @Component
+@SuppressWarnings("MagicNumber")
 public class TrackCommand implements BotCommand {
 
     @Autowired
+    @Qualifier("InDbLinkRepository")
     private LinkRepository linkRepository;
 
     @Autowired
@@ -32,14 +35,17 @@ public class TrackCommand implements BotCommand {
         }
         var url = msg[1];
         if (linkValidation.validateLink(url)) {
-            if (linkRepository.existLink(chatId, url)) {
-                return new SendMessage(chatId, "Ссылка уже добавлена");
-            }
-            var added = linkRepository.trackLink(chatId, url);
-            if (added) {
+            try {
+                linkRepository.trackLink(chatId, url);
                 return new SendMessage(chatId, "Ссылка успешно добавлена");
+            } catch (HttpClientErrorException ex) {
+                if (ex.getStatusCode().value() == 400) {
+                    return new SendMessage(chatId, "Ссылка уже добавлена");
+                } else if (ex.getStatusCode().value() == 404) {
+                    return new SendMessage(chatId, "Вы не были еще зарегистрированы");
+                }
+                return new SendMessage(chatId, "Не удалось добавить ссылку");
             }
-            return new SendMessage(chatId, "Не удалось добавить ссылку");
         } else {
             return new SendMessage(chatId, "Неверный формат ссылки");
         }

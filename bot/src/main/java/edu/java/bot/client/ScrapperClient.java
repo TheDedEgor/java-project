@@ -12,23 +12,23 @@ import org.springframework.web.service.annotation.PostExchange;
 
 public interface ScrapperClient {
     @PostExchange("/tg-chat/{id}")
-    void createTgChat(@PathVariable Integer id);
+    void createTgChat(@PathVariable Long id);
 
     @DeleteExchange("/tg-chat/{id}")
-    void deleteTgChat(@PathVariable Integer id);
+    void deleteTgChat(@PathVariable Long id);
 
     @GetExchange("/links")
-    ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId);
+    ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Long chatId);
 
     @PostExchange("/links")
     LinkResponse createLink(
-        @RequestHeader("Tg-Chat-Id") Integer chatId,
+        @RequestHeader("Tg-Chat-Id") Long chatId,
         @RequestBody AddLinkRequest addLinkRequest
     );
 
     @DeleteExchange("/links")
     LinkResponse deleteLink(
-        @RequestHeader("Tg-Chat-Id") Integer chatId,
+        @RequestHeader("Tg-Chat-Id") Long chatId,
         @RequestBody AddLinkRequest addLinkRequest
     );
 }

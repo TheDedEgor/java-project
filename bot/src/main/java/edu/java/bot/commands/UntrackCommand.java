@@ -2,14 +2,18 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.links.LinkRepository;
+import edu.java.bot.repository.links.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Component
+@SuppressWarnings("MagicNumber")
 public class UntrackCommand implements BotCommand {
 
     @Autowired
+    @Qualifier("InDbLinkRepository")
     private LinkRepository linkRepository;
 
     @Override
@@ -25,13 +29,14 @@ public class UntrackCommand implements BotCommand {
             return new SendMessage(chatId, "Введите ссылку после команды");
         }
         var url = msg[1];
-        if (!linkRepository.existLink(chatId, url)) {
-            return new SendMessage(chatId, "Ссылки нет в отслеживаемых");
-        }
-        var removed = linkRepository.untrackLink(chatId, url);
-        if (removed) {
+        try {
+            linkRepository.untrackLink(chatId, url);
             return new SendMessage(chatId, "Ссылка успешно удалена");
+        } catch (HttpClientErrorException ex) {
+            if (ex.getStatusCode().value() == 404) {
+                return new SendMessage(chatId, "Такой ссылки не зарегистрировано");
+            }
+            return new SendMessage(chatId, "Произошла ошибка при удалении ссылки");
         }
-        return new SendMessage(chatId, "Произошла ошибка при удалении ссылки");
     }
 }
