@@ -1,4 +1,4 @@
-package edu.java.scrapper.models.entity;
+package edu.java.scrapper.models.domain;
 
 import java.time.OffsetDateTime;
 

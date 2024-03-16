@@ -23,10 +23,10 @@ public class JdbcLinkTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    public void addLink() throws NotFoundChatException {
-        chatRepository.add(1L);
-        linkRepository.add(1L, "https://edu.tinkoff.ru");
-        var links = linkRepository.findAll(1L);
+    public void addLink()  {
+        var chatId = chatRepository.add(1L);
+        linkRepository.add(chatId, "https://edu.tinkoff.ru");
+        var links = linkRepository.findAll(chatId);
         assertThat(links.size()).isEqualTo(1L);
         var link = links.getFirst();
         assertThat(link.id()).isEqualTo(1L);
@@ -36,10 +36,10 @@ public class JdbcLinkTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    public void removeLink() throws NotFoundChatException, NotFoundLinkException {
-        chatRepository.add(1L);
-        linkRepository.add(1L, "https://edu.tinkoff.ru");
-        linkRepository.remove(1L, "https://edu.tinkoff.ru");
+    public void removeLink() {
+        var chatId = chatRepository.add(1L);
+        var link = linkRepository.add(chatId, "https://edu.tinkoff.ru");
+        linkRepository.remove(chatId, link.id());
         var links = linkRepository.findAll(1L);
         assertThat(links.size()).isEqualTo(0);
     }
@@ -47,11 +47,11 @@ public class JdbcLinkTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    public void findAll() throws NotFoundChatException {
-        chatRepository.add(1L);
-        linkRepository.add(1L, "https://edu.tinkoff.ru");
-        linkRepository.add(1L, "https://docs.spring.io");
-        var links = linkRepository.findAll(1L);
+    public void findAll() {
+        var chatId = chatRepository.add(1L);
+        linkRepository.add(chatId, "https://edu.tinkoff.ru");
+        linkRepository.add(chatId, "https://docs.spring.io");
+        var links = linkRepository.findAll(chatId);
         assertThat(links.size()).isEqualTo(2);
     }
 }

@@ -25,6 +25,11 @@ public class JdbcTgChatService implements TgChatService {
 
     @Override
     public void unregister(Long tgChatId) throws NotFoundChatException {
-        chatRepository.remove(tgChatId);
+        var exist = chatRepository.existByTgChatId(tgChatId);
+        if (exist) {
+            chatRepository.remove(tgChatId);
+        } else {
+            throw new NotFoundChatException("Not found chat");
+        }
     }
 }

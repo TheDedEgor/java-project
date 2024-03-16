@@ -1,13 +1,13 @@
-package edu.java.bot.links;
+package edu.java.bot.repository.links;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 @Qualifier("InMemoryLinkRepository")
 public class InMemoryLinkRepository implements LinkRepository {
 

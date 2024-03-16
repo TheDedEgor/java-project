@@ -1,10 +1,9 @@
 package edu.java.scrapper.repository;
 
-import edu.java.scrapper.exception.NotFoundChatException;
-import edu.java.scrapper.exception.NotFoundLinkException;
-import edu.java.scrapper.models.entity.Link;
+import edu.java.scrapper.models.domain.Link;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@SuppressWarnings("MultipleStringLiterals")
+@SuppressWarnings({"MultipleStringLiterals", "MagicNumber"})
 public class LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -29,7 +28,7 @@ public class LinkRepository {
             .usingColumns("url");
     }
 
-    public List<Link> findAll(Long tgChatId) {
+    public List<Link> findAll(Long chatId) {
         return jdbcTemplate.query(
             """
                 SELECT
@@ -39,14 +38,14 @@ public class LinkRepository {
                 FROM links
                     JOIN chats_links cl ON links.id = cl.link_id
                     JOIN chats ch ON ch.id = cl.chat_id
-                WHERE tg_chat_id = ?
+                WHERE ch.id = ?
                 """,
             (row, item) ->
                 new Link(
                     row.getLong("id"),
                     row.getString("url"),
                     parseDate(row.getString("last_check_time"))
-                ), tgChatId
+                ), chatId
         );
     }
 
@@ -54,7 +53,7 @@ public class LinkRepository {
         return jdbcTemplate.query(
             """
                 SELECT * FROM links
-                WHERE last_check_time IS NULL OR EXTRACT(EPOCH FROM (now() - last_check_time)) / 60 > 5;
+                WHERE EXTRACT(EPOCH FROM (now() - last_check_time)) / 60 > 5;
                 """,
             (row, item) -> new Link(
                 row.getLong("id"),
@@ -85,39 +84,23 @@ public class LinkRepository {
     }
 
     @Transactional
-    public Link add(Long tgChatId, String url) throws NotFoundChatException {
-        var optionalChatId = getChatIdByTgChatId(tgChatId);
-        if (optionalChatId.isPresent()) {
-            var chatId = optionalChatId.get();
-            var optionalLinkId = getLinkIdByUrl(url);
-            Long linkId;
-            if (optionalLinkId.isEmpty()) {
-                final var parameters = Map.of("url", url);
-                linkId = (Long) insertIntoLink.executeAndReturnKey(parameters);
-            } else {
-                linkId = optionalLinkId.get();
-            }
-
-            jdbcTemplate.update("INSERT INTO chats_links(chat_id, link_id) VALUES (?, ?)", chatId, linkId);
-
-            return getLinkById(linkId).get();
+    public Link add(Long chatId, String url) {
+        var optionalLinkId = getLinkIdByUrl(url);
+        Long linkId;
+        if (optionalLinkId.isEmpty()) {
+            final var parameters = Map.of("url", url);
+            linkId = (Long) insertIntoLink.executeAndReturnKey(parameters);
         } else {
-            throw new NotFoundChatException("Not found chat");
+            linkId = optionalLinkId.get();
         }
+
+        jdbcTemplate.update("INSERT INTO chats_links(chat_id, link_id) VALUES (?, ?)", chatId, linkId);
+
+        return getLinkById(linkId).get();
     }
 
     @Transactional
-    public Link remove(Long tgChatId, String url) throws NotFoundChatException, NotFoundLinkException {
-        var optionalChatId = getChatIdByTgChatId(tgChatId);
-        if (optionalChatId.isEmpty()) {
-            throw new NotFoundChatException("Not found chat");
-        }
-        var optionalLinkId = getLinkIdByUrl(url);
-        if (optionalLinkId.isEmpty()) {
-            throw new NotFoundLinkException("Not found link");
-        }
-        var chatId = optionalChatId.get();
-        var linkId = optionalLinkId.get();
+    public Link remove(Long chatId, Long linkId) {
         var link = getLinkById(linkId).get();
         jdbcTemplate.update("DELETE FROM chats_links WHERE chat_id = ? AND link_id = ? ", chatId, linkId);
         var ids = jdbcTemplate.query("SELECT id FROM chats_links WHERE link_id = ? LIMIT 1",
@@ -129,7 +112,7 @@ public class LinkRepository {
         return link;
     }
 
-    private Optional<Long> getChatIdByTgChatId(Long tgChatId) {
+    public Optional<Long> getChatIdByTgChatId(Long tgChatId) {
         var ids = jdbcTemplate.query("SELECT id FROM chats WHERE tg_chat_id = ?", (row, item) ->
             row.getLong("id"), tgChatId);
         if (ids.isEmpty()) {
@@ -138,7 +121,7 @@ public class LinkRepository {
         return Optional.of(ids.getFirst());
     }
 
-    private Optional<Long> getLinkIdByUrl(String url) {
+    public Optional<Long> getLinkIdByUrl(String url) {
         var ids = jdbcTemplate.query("SELECT * FROM links WHERE url = ?",
             (row, item) -> row.getLong("id"), url
         );
@@ -166,7 +149,12 @@ public class LinkRepository {
         if (date == null) {
             return null;
         }
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSx");
+        var formatter = new DateTimeFormatterBuilder()
+            .appendPattern("yyyy-MM-dd HH:mm:ss.")
+            .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, false)
+            .appendPattern("x")
+            .toFormatter();
+
         return OffsetDateTime.parse(date, formatter);
     }
 }

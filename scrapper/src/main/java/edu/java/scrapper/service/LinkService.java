@@ -3,7 +3,7 @@ package edu.java.scrapper.service;
 import edu.java.scrapper.exception.ExistLinkException;
 import edu.java.scrapper.exception.NotFoundChatException;
 import edu.java.scrapper.exception.NotFoundLinkException;
-import edu.java.scrapper.models.entity.Link;
+import edu.java.scrapper.models.domain.Link;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +17,7 @@ public interface LinkService {
 
     void updateLinkDate(Long linkId);
 
-    Collection<Link> listAll(Long tgChatId);
+    Collection<Link> listAll(Long tgChatId) throws NotFoundChatException;
 
     Collection<Link> findOldUpdateLinks();
 }

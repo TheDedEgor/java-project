@@ -14,7 +14,7 @@ create table links (
 
 create table chats_links (
     id bigserial primary key,
-    chat_id bigint references chats,
+    chat_id bigint references chats on delete cascade,
     link_id bigint references links,
     unique (chat_id, link_id)
 );

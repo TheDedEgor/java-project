@@ -1,4 +1,4 @@
-package edu.java.bot.links;
+package edu.java.bot.repository.links;
 
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;

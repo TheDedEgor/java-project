@@ -1,10 +1,10 @@
-package edu.java.bot.chat;
+package edu.java.bot.repository.chat;
 
 import edu.java.bot.client.ScrapperClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class InDbChatRepository implements ChatRepository {
 
     @Autowired

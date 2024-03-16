@@ -1,4 +1,4 @@
-package edu.java.bot.chat;
+package edu.java.bot.repository.chat;
 
 public interface ChatRepository {
 
