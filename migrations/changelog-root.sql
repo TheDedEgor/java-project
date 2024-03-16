@@ -9,7 +9,7 @@ create table chats (
 create table links (
     id bigserial primary key,
     url varchar(255) unique not null,
-    last_check_time timestamp with time zone
+    last_check_time timestamp with time zone default now() not null
 );
 
 create table chats_links (

@@ -41,9 +41,7 @@ public class LinkUpdaterScheduler {
                 var owner = path[1];
                 var repo = path[2];
                 var res = gitHubClient.getRepository(owner, repo);
-                if (link.lastCheckTime() == null) {
-                    linkService.updateLinkDate(link.id());
-                } else if (link.lastCheckTime().isBefore(res.updatedAt())
+                if (link.lastCheckTime().isBefore(res.updatedAt())
                     || link.lastCheckTime().isBefore(res.pushedAt())) {
                     linkService.updateLinkDate(link.id());
                     var tgChatIds = linkService.getAllTgChatIdByLinkId(link.id());
@@ -57,9 +55,7 @@ public class LinkUpdaterScheduler {
             } else if (host.equals("stackoverflow.com")) {
                 var questionId = Long.parseLong(url.getPath().split("/")[2]);
                 var res = stackOverflowClient.getQuestion(questionId).questions().getFirst();
-                if (link.lastCheckTime() == null) {
-                    linkService.updateLinkDate(link.id());
-                } else if (link.lastCheckTime().isBefore(res.lastActivityDate())) {
+                if (link.lastCheckTime().isBefore(res.lastActivityDate())) {
                     linkService.updateLinkDate(link.id());
                     var tgChatIds = linkService.getAllTgChatIdByLinkId(link.id());
                     botClient.updates(new UpdateRequest(

@@ -25,7 +25,8 @@ public class LinkRepository {
     @Autowired
     public LinkRepository(DataSource datasource) {
         jdbcTemplate = new JdbcTemplate(datasource);
-        insertIntoLink = new SimpleJdbcInsert(jdbcTemplate).withTableName("links").usingGeneratedKeyColumns("id");
+        insertIntoLink = new SimpleJdbcInsert(jdbcTemplate).withTableName("links").usingGeneratedKeyColumns("id")
+            .usingColumns("url");
     }
 
     public List<Link> findAll(Long tgChatId) {
@@ -66,13 +67,13 @@ public class LinkRepository {
     public List<Long> getAllTgChatIdByLinkId(Long linkId) {
         return jdbcTemplate.query(
             """
-                    SELECT
-                        ch.tg_chat_id
-                    FROM links
-                        JOIN chats_links cl ON links.id = cl.link_id
-                        JOIN chats ch ON ch.id = cl.chat_id
-                    WHERE links.id = ?
-                    """,
+                SELECT
+                    ch.tg_chat_id
+                FROM links
+                    JOIN chats_links cl ON links.id = cl.link_id
+                    JOIN chats ch ON ch.id = cl.chat_id
+                WHERE links.id = ?
+                """,
             (row, item) ->
                 row.getLong("tg_chat_id"), linkId
         );
@@ -165,7 +166,7 @@ public class LinkRepository {
         if (date == null) {
             return null;
         }
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSx");
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSx");
         return OffsetDateTime.parse(date, formatter);
     }
 }
