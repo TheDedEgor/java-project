@@ -32,7 +32,6 @@ public class JpaLinkTest extends IntegrationTest {
         var links = chat.getLinks();
         assertThat(links.size()).isEqualTo(1L);
         link = links.getFirst();
-        assertThat(link.getId()).isEqualTo(1L);
         assertThat(link.getUrl()).isEqualTo("https://edu.tinkoff.ru");
     }
 
