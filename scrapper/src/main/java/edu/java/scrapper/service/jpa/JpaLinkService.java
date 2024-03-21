@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("MultipleStringLiterals")
 public class JpaLinkService implements LinkService {
@@ -27,6 +28,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public Link add(Long tgChatId, URI url) throws NotFoundChatException, ExistLinkException {
         try {
             var optionalChat = chatRepository.findByTgChatId(tgChatId);
@@ -52,6 +54,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public Link remove(Long tgChatId, URI url) throws NotFoundLinkException, NotFoundChatException {
         var optionalChat = chatRepository.findByTgChatId(tgChatId);
         if (optionalChat.isEmpty()) {
@@ -69,6 +72,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public List<Long> getAllTgChatIdByLinkId(Long linkId) {
         var link = linkRepository.findById(linkId).get();
         return link.getChats().stream()
@@ -77,6 +81,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public void updateLinkDate(Long linkId) {
         var link = linkRepository.findById(linkId).get();
         link.setLastCheckTime(OffsetDateTime.now());
@@ -84,6 +89,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public Collection<Link> listAll(Long tgChatId) throws NotFoundChatException {
         var optionalChat = chatRepository.findByTgChatId(tgChatId);
         if (optionalChat.isPresent()) {
@@ -97,6 +103,7 @@ public class JpaLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public Collection<Link> findOldUpdateLinks() {
         return linkRepository.findOldUpdateLinks().stream()
             .map(link -> new Link(link.getId(), link.getUrl(), link.getLastCheckTime()))
