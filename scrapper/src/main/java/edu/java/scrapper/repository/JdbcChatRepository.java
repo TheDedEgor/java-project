@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @SuppressWarnings("MultipleStringLiterals")
-public class ChatRepository {
+public class JdbcChatRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

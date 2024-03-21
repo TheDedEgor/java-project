@@ -3,6 +3,7 @@ app:
     enable: true
     interval: PT10S
     force-check-delay: PT10S
+  database-access-type: jpa
 
 spring:
   application:
