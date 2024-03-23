@@ -1,9 +1,7 @@
 package edu.java.scrapper;
 
-import edu.java.scrapper.exception.NotFoundChatException;
-import edu.java.scrapper.exception.NotFoundLinkException;
-import edu.java.scrapper.repository.ChatRepository;
-import edu.java.scrapper.repository.LinkRepository;
+import edu.java.scrapper.repository.JdbcChatRepository;
+import edu.java.scrapper.repository.JdbcLinkRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,18 +13,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class JdbcLinkTest extends IntegrationTest {
 
     @Autowired
-    private LinkRepository linkRepository;
+    private JdbcLinkRepository jdbcLinkRepository;
 
     @Autowired
-    private ChatRepository chatRepository;
+    private JdbcChatRepository jdbcChatRepository;
 
     @Test
     @Transactional
     @Rollback
     public void addLink()  {
-        var chatId = chatRepository.add(1L);
-        linkRepository.add(chatId, "https://edu.tinkoff.ru");
-        var links = linkRepository.findAll(chatId);
+        var chatId = jdbcChatRepository.add(1L);
+        jdbcLinkRepository.add(chatId, "https://edu.tinkoff.ru");
+        var links = jdbcLinkRepository.findAll(chatId);
         assertThat(links.size()).isEqualTo(1L);
         var link = links.getFirst();
         assertThat(link.id()).isEqualTo(1L);
@@ -37,10 +35,10 @@ public class JdbcLinkTest extends IntegrationTest {
     @Transactional
     @Rollback
     public void removeLink() {
-        var chatId = chatRepository.add(1L);
-        var link = linkRepository.add(chatId, "https://edu.tinkoff.ru");
-        linkRepository.remove(chatId, link.id());
-        var links = linkRepository.findAll(1L);
+        var chatId = jdbcChatRepository.add(1L);
+        var link = jdbcLinkRepository.add(chatId, "https://edu.tinkoff.ru");
+        jdbcLinkRepository.remove(chatId, link.id());
+        var links = jdbcLinkRepository.findAll(1L);
         assertThat(links.size()).isEqualTo(0);
     }
 
@@ -48,10 +46,10 @@ public class JdbcLinkTest extends IntegrationTest {
     @Transactional
     @Rollback
     public void findAll() {
-        var chatId = chatRepository.add(1L);
-        linkRepository.add(chatId, "https://edu.tinkoff.ru");
-        linkRepository.add(chatId, "https://docs.spring.io");
-        var links = linkRepository.findAll(chatId);
+        var chatId = jdbcChatRepository.add(1L);
+        jdbcLinkRepository.add(chatId, "https://edu.tinkoff.ru");
+        jdbcLinkRepository.add(chatId, "https://docs.spring.io");
+        var links = jdbcLinkRepository.findAll(chatId);
         assertThat(links.size()).isEqualTo(2);
     }
 }

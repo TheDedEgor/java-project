@@ -4,12 +4,11 @@ import edu.java.scrapper.exception.ExistLinkException;
 import edu.java.scrapper.exception.NotFoundChatException;
 import edu.java.scrapper.exception.NotFoundLinkException;
 import edu.java.scrapper.models.domain.Link;
-import edu.java.scrapper.repository.LinkRepository;
+import edu.java.scrapper.repository.JdbcLinkRepository;
 import edu.java.scrapper.service.LinkService;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,11 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("MultipleStringLiterals")
 public class JdbcLinkService implements LinkService {
 
-    @Autowired
-    private LinkRepository linkRepository;
+    private final JdbcLinkRepository linkRepository;
+
+    public JdbcLinkService(JdbcLinkRepository linkRepository) {
+        this.linkRepository = linkRepository;
+    }
 
     @Override
     public Link add(Long tgChatId, URI url) throws NotFoundChatException, ExistLinkException {

@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @SuppressWarnings({"MultipleStringLiterals", "MagicNumber"})
-public class LinkRepository {
+public class JdbcLinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert insertIntoLink;
 
     @Autowired
-    public LinkRepository(DataSource datasource) {
+    public JdbcLinkRepository(DataSource datasource) {
         jdbcTemplate = new JdbcTemplate(datasource);
         insertIntoLink = new SimpleJdbcInsert(jdbcTemplate).withTableName("links").usingGeneratedKeyColumns("id")
             .usingColumns("url");
