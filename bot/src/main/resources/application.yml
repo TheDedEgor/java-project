@@ -1,5 +1,5 @@
 app:
-  telegram-token: 6387539887:AAE-5BaNwisrDtY5ZiZZthsSY_RlHWkY_vI
+  telegram-token: unset
   back-off: constant
   retry-codes: 500, 400, 404
 
