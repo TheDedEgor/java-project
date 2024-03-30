@@ -34,8 +34,8 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
-        var links = linkService.findOldUpdateLinks();
-        links.forEach(this::checkLinks);
+//        var links = linkService.findOldUpdateLinks();
+//        links.forEach(this::checkLinks);
     }
 
     private void checkLinks(Link link) {
