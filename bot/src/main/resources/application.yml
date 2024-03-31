@@ -1,5 +1,7 @@
 app:
   telegram-token: unset
+  back-off: constant
+  retry-codes: 500, 400, 404
 
 spring:
   application:

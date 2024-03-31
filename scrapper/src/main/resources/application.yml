@@ -4,6 +4,8 @@ app:
     interval: PT10S
     force-check-delay: PT10S
   database-access-type: jpa
+  back-off: constant
+  retry-codes: 500, 400, 404
 
 spring:
   application:
