@@ -1,11 +1,11 @@
 package edu.java.scrapper.scheduler;
 
-import edu.java.scrapper.client.BotClient;
 import edu.java.scrapper.client.GitHubClient;
 import edu.java.scrapper.client.StackOverflowClient;
 import edu.java.scrapper.models.domain.Link;
 import edu.java.scrapper.models.dto.UpdateRequest;
 import edu.java.scrapper.service.LinkService;
+import edu.java.scrapper.service.SenderNotification;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -27,15 +27,15 @@ public class LinkUpdaterScheduler {
     private StackOverflowClient stackOverflowClient;
 
     @Autowired
-    private BotClient botClient;
+    private LinkService linkService;
 
     @Autowired
-    private LinkService linkService;
+    private SenderNotification senderNotification;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
-//        var links = linkService.findOldUpdateLinks();
-//        links.forEach(this::checkLinks);
+        var links = linkService.findOldUpdateLinks();
+        links.forEach(this::checkLinks);
     }
 
     private void checkLinks(Link link) {
@@ -61,7 +61,8 @@ public class LinkUpdaterScheduler {
             || link.lastCheckTime().isBefore(res.pushedAt())) {
             linkService.updateLinkDate(link.id());
             var tgChatIds = linkService.getAllTgChatIdByLinkId(link.id());
-            sendBotUpdates(link, "Репозиторий GitHub обновился", tgChatIds);
+            var updateRequest = createUpdateRequest(link, "Репозиторий GitHub обновился", tgChatIds);
+            senderNotification.send(updateRequest);
         }
     }
 
@@ -71,17 +72,18 @@ public class LinkUpdaterScheduler {
         if (link.lastCheckTime().isBefore(res.lastActivityDate())) {
             linkService.updateLinkDate(link.id());
             var tgChatIds = linkService.getAllTgChatIdByLinkId(link.id());
-            sendBotUpdates(link, "Новая информация по вопросу StackOverFlow", tgChatIds);
+            var updateRequest = createUpdateRequest(link, "Новая информация по вопросу StackOverFlow", tgChatIds);
+            senderNotification.send(updateRequest);
         }
     }
 
-    private void sendBotUpdates(Link link, String description, List<Long> tgChatIds) {
-        botClient.updates(new UpdateRequest(
+    private UpdateRequest createUpdateRequest(Link link, String description, List<Long> tgChatIds) {
+        return new UpdateRequest(
             link.id(),
             link.url(),
             description,
             tgChatIds
-        ));
+        );
     }
 }
 

@@ -14,7 +14,10 @@ public record ApplicationConfig(
     Scheduler scheduler,
     AccessType databaseAccessType,
     BackOffType backOff,
-    List<Integer> retryCodes
+    List<Integer> retryCodes,
+    String topicName,
+    Boolean useQueue,
+    String bootstrapServer
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
