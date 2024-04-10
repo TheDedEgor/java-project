@@ -13,7 +13,10 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     BackOffType backOff,
-    List<Integer> retryCodes
+    List<Integer> retryCodes,
+    String topicName,
+    String consumerGroupId,
+    String bootstrapServer
 ) {
     @Bean
     public TelegramBot telegramBot() {

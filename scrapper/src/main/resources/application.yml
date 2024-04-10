@@ -6,6 +6,9 @@ app:
   database-access-type: jpa
   back-off: constant
   retry-codes: 500, 400, 404
+  topic-name: updates
+  use-queue: true
+  bootstrap-server: localhost:9092
 
 spring:
   application:
