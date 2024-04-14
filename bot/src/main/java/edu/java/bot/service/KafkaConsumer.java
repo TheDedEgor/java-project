@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumer {
 
     @Autowired
-    private MainService mainService;
+    private UpdateService updateService;
 
     @RetryableTopic(attempts = "1", kafkaTemplate = "retryableTopicKafkaTemplate", dltTopicSuffix = "_dlq")
     @KafkaListener(topics = "${app.topic-name}", containerFactory = "containerFactory")
     public void kafka(UpdateRequest updateRequest) {
-        mainService.updatesHandler(updateRequest);
+        updateService.updatesHandler(updateRequest);
     }
 }

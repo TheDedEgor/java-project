@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.main.BotExceptionHandler;
 import edu.java.bot.main.BotUpdateListener;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,5 +33,6 @@ public class BotApplication {
     @EventListener(ApplicationReadyEvent.class)
     public void runBot() {
         bot.setUpdatesListener(botUpdateListener, botExceptionHandler);
+        Metrics.addRegistry(new SimpleMeterRegistry());
     }
 }
