@@ -20,3 +20,20 @@ logging:
   config: classpath:log4j2-plain.xml
 
 springdoc.swagger-ui.path: /swagger-ui
+
+management:
+  server.port: 8095
+  endpoints:
+    web:
+      base-path: /
+      exposure.include: info, health, prometheus
+      path-mapping.prometheus: /metrics
+  endpoint:
+    info.enabled: true
+    health.enabled: true
+    prometheus.enabled: true
+
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
