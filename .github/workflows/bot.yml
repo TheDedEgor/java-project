@@ -37,8 +37,6 @@ jobs:
           title: Code Coverage
           update-comment: true
 
-      - uses: actions/checkout@v4
-
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
