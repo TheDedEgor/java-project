@@ -31,7 +31,7 @@ jobs:
         if: ( github.event_name != 'workflow_dispatch' )
         with:
           paths: ${{ github.workspace }}/bot/target/site/jacoco/jacoco.xml
-          token: ${{ secrets.SECRET_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 30
           min-coverage-changed-files: 30
           title: Code Coverage
@@ -42,7 +42,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRET_TOKEN }}
 
       - name: Build and push bot image
         uses: docker/build-push-action@v2
