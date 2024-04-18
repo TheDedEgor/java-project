@@ -49,7 +49,6 @@ jobs:
           context: .
           file: ./bot.Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/bot:latest
 
   checkstyle:
     name: checkstyle
