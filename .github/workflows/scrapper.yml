@@ -37,6 +37,21 @@ jobs:
           title: Code Coverage
           update-comment: true
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push scrapper image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./scrapper.Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}/scrapper:latest
+
   checkstyle:
     name: checkstyle
     runs-on: ubuntu-latest
