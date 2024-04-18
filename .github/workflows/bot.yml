@@ -49,6 +49,7 @@ jobs:
           context: .
           file: ./bot.Dockerfile
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
 
   checkstyle:
     name: checkstyle
