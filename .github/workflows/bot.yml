@@ -49,7 +49,7 @@ jobs:
           context: .
           file: ./bot.Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: java-project/bot
 
   checkstyle:
     name: checkstyle

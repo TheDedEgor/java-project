@@ -49,7 +49,7 @@ jobs:
           context: .
           file: ./scrapper.Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: java-project/scrapper
 
   checkstyle:
     name: checkstyle
