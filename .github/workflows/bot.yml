@@ -42,7 +42,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRET_TOKEN }}
 
       - name: Build and push bot image
         uses: docker/build-push-action@v5
