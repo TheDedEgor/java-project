@@ -61,7 +61,7 @@ jobs:
           context: .
           file: ./scrapper.Dockerfile
           push: true
-          tags: java-project/scrapper
+          tags: ghcr.io/${{ github.repository_owner }}/scrapper:latest
 
   checkstyle:
     name: checkstyle
