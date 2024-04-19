@@ -60,7 +60,7 @@ jobs:
           context: .
           file: ./bot.Dockerfile
           push: true
-          tags: ghcr.io/bot:latest
+          tags: ghcr.io/thededegor/bot:latest
 
   checkstyle:
     name: checkstyle

@@ -61,7 +61,7 @@ jobs:
           context: .
           file: ./scrapper.Dockerfile
           push: true
-          tags: ghcr.io/scrapper:latest
+          tags: ghcr.io/thededegor/scrapper:latest
 
   checkstyle:
     name: checkstyle
