@@ -61,7 +61,7 @@ jobs:
           context: .
           file: ./scrapper.Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/scrapper:latest
+          tags: ghcr.io/scrapper:latest
 
   checkstyle:
     name: checkstyle
